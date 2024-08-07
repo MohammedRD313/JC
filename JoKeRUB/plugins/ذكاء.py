@@ -8,18 +8,18 @@ from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "البوت"
 
-@l313l.ar_cmd(pattern="سؤال (.+?) (.+)")
+@l313l.ar_cmd(pattern="سؤال(?: |$)(.*)")
 async def zelzal_gpt(event):
-    bot_username = event.pattern_match.group(1)
-    question = event.pattern_match.group(2)
+    question = event.pattern_match.group(1)
     reply_message = await event.get_reply_message()
+    bot_username = "@ScorGPTbot"
 
     if not question and not event.reply_to_msg_id:
-        return await edit_or_reply(event, "**✎┊‌ بالرد على السؤال او بأضافة سؤال \n يعني تكتب (`.سؤال <bot_username> <سؤالك>`). \n\n مثال : \n `.سؤال ScorGPTbot من هو مخترع الكهرباء`**")
+        return await edit_or_reply(event, "**✎┊‌ بالرد على السؤال او بأضافة سؤال \n يعني تكتب (`.سؤال`) وبعده سؤالك وخلص 😌 \n\n مثال : \n `.سؤال من هو مخترع الكهرباء`**")
     
     if not question and event.reply_to_msg_id and reply_message.text: 
         question = reply_message.text
-    
+
     response_msg = await edit_or_reply(event, "**✎┊‌اصبر حبيبي هسة يجاوبك 😁**")
 
     try:
