@@ -13,7 +13,6 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import reply_id
 from . import (
     deEmojify,
-    fakegs,
     kannagen,
     moditweet,
     reply_id,
