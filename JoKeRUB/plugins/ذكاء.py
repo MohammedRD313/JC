@@ -27,6 +27,7 @@ async def zelzal_gpt(event):
 
     async with borg.conversation(chat) as conv:
         try:
+            print(f"Sending question: {question}")
             await conv.send_message(question)
             response = await conv.get_response()
             print(f"Received initial response: {response.text}")
