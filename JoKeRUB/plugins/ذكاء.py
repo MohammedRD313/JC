@@ -10,7 +10,7 @@ plugin_category = "البوت"
 async def zelzal_gpt(event):
     question = event.pattern_match.group(1)
     reply_msg = await event.get_reply_message()
-    chat = "@BotUsername"  # ضع هنا اسم المستخدم للبوت الذي تريد التعامل معه
+    chat = "@ScorGPTbot"  # ضع هنا اسم المستخدم للبوت الذي تريد التعامل معه
 
     if not question and not event.reply_to_msg_id:
         return await edit_or_reply(event, "**✎┊‌ بالرد على السؤال او بأضافة سؤال \n يعني تكتب (`.سؤال`) وبعده سؤالك وخلص 😌 \n\n مثال : \n `.سؤال من هو مخترع الكهرباء`**")
