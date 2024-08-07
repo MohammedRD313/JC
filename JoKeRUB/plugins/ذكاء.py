@@ -2,7 +2,6 @@ import asyncio
 from telethon import events
 from telethon.errors import FloodWaitError, YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest
-
 from JoKeRUB import l313l
 from ..core.managers import edit_delete, edit_or_reply
 
@@ -25,8 +24,8 @@ async def zelzal_gpt(event):
     
     response_msg = await edit_or_reply(event, "**✎┊‌اصبر حبيبي هسة يجاوبك 😁**")
 
-    async with borg.conversation(chat) as conv:
-        try:
+    try:
+        async with borg.conversation(chat) as conv:
             print(f"Sending question: {question}")
             await conv.send_message(question)
             response = await conv.get_response()
@@ -48,9 +47,10 @@ async def zelzal_gpt(event):
             
             await response_msg.delete()
             await borg.send_message(event.chat_id, f"**السؤال : {question}\n\n{final_response.text}**\n\n───────────────────\n")
-        except YouBlockedUserError: 
-            print("YouBlockedUserError: Trying to unblock and resend")
-            await borg(UnblockRequest("ScorGPTbot"))
+    except YouBlockedUserError: 
+        print("YouBlockedUserError: Trying to unblock and resend")
+        await borg(UnblockRequest("ScorGPTbot"))
+        async with borg.conversation(chat) as conv:
             await conv.send_message("/start")
             await conv.get_response()
             await conv.send_message(question)
@@ -73,10 +73,10 @@ async def zelzal_gpt(event):
             
             await response_msg.delete()
             await borg.send_message(event.chat_id, f"**السؤال : {question}\n\n{final_response.text}**\n\n───────────────────\n")
-        except FloodWaitError as e:
-            print(f"FloodWaitError: Waiting for {e.seconds} seconds")
-            await asyncio.sleep(e.seconds)
-            await zelzal_gpt(event)
-        except Exception as e:
-            print(f"Exception: {str(e)}")
-            await response_msg.edit(f"**حدث خطأ:** {str(e)}")
+    except FloodWaitError as e:
+        print(f"FloodWaitError: Waiting for {e.seconds} seconds")
+        await asyncio.sleep(e.seconds)
+        await zelzal_gpt(event)
+    except Exception as e:
+        print(f"Exception: {str(e)}")
+        await response_msg.edit(f"**حدث خطأ:** {str(e)}")
