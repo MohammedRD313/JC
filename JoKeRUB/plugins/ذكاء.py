@@ -29,6 +29,7 @@ async def zelzal_gpt(event):
         try:
             await conv.send_message(question)
             response = await conv.get_response()
+            print(f"Received initial response: {response.text}")
             
             if "another 8 seconds" in response.text: 
                 msg = response.text.replace("⏳ Please wait another 8 seconds before sending the next question . . .", "**✎┊‌اصبر حبيبي هسة يجاوبك 😘**") 
@@ -37,6 +38,7 @@ async def zelzal_gpt(event):
             
             await asyncio.sleep(5)
             final_response = await conv.get_response()
+            print(f"Received final response: {final_response.text}")
             
             if "understanding" in final_response.text: 
                 msg = final_response.text.replace("I'm sorry, I'm not quite understanding the question. Could you please rephrase it?", "**- عـذرًا .. لم أفهم سؤالك\n- قم بـ إعادة صياغته من فضلك؟!**") 
@@ -46,11 +48,13 @@ async def zelzal_gpt(event):
             await response_msg.delete()
             await borg.send_message(event.chat_id, f"**السؤال : {question}\n\n{final_response.text}**\n\n───────────────────\n")
         except YouBlockedUserError: 
+            print("YouBlockedUserError: Trying to unblock and resend")
             await borg(UnblockRequest("ScorGPTbot"))
             await conv.send_message("/start")
             await conv.get_response()
             await conv.send_message(question)
             response = await conv.get_response()
+            print(f"Received initial response after unblock: {response.text}")
             
             if "another 8 seconds" in response.text:
                 msg = response.text.replace("⏳ Please wait another 8 seconds before sending the next question . . .", "**✎┊‌ اصبر حبيبي هسة يجاوبك 😁**") 
@@ -59,6 +63,7 @@ async def zelzal_gpt(event):
             
             await asyncio.sleep(5)
             final_response = await conv.get_response()
+            print(f"Received final response after unblock: {final_response.text}")
             
             if "understanding" in final_response.text:
                 msg = final_response.text.replace("I'm sorry, I'm not quite understanding the question. Could you please rephrase it?", "**- عـذرًا .. لم أفهم سؤالك\n- قم بـ إعادة صياغته من فضلك؟!**") 
@@ -68,7 +73,9 @@ async def zelzal_gpt(event):
             await response_msg.delete()
             await borg.send_message(event.chat_id, f"**السؤال : {question}\n\n{final_response.text}**\n\n───────────────────\n")
         except FloodWaitError as e:
+            print(f"FloodWaitError: Waiting for {e.seconds} seconds")
             await asyncio.sleep(e.seconds)
             await zelzal_gpt(event)
         except Exception as e:
+            print(f"Exception: {str(e)}")
             await response_msg.edit(f"**حدث خطأ:** {str(e)}")
